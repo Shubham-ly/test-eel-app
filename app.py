@@ -35,23 +35,21 @@ def add_new_user(user):
 
 @eel.expose
 def get_all_users():
+    fields = ("id", "name", "email")
     query = 'SELECT * from users'
     cursor = conn.execute(query)
     users = []
     for user in cursor:
+        print(dict(zip(fields, user)))
         users.append(
-            {
-                "id": user[0],
-                "name": user[1],
-                "email": user[2]
-            }
+            dict(zip( fields, user ))
         )
     return users
 
 
 @eel.expose
 def delete_user(id):
-    query = 'DELETE FROM users WHERE id = ?'
+    query = 'DELETE ROM users WHERE id = ?'
     conn.execute(query, (id, ))
     conn.commit()
     return  {
@@ -64,4 +62,4 @@ def close_connection():
     conn.close()
 
 
-eel.start('index.html')
+eel.start('index.html', mode='chrome', cmdline_args=['--start-fullscreen'])
